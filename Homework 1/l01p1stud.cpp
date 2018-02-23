@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <iostream>
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
