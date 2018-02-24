@@ -50,7 +50,10 @@ void Display3() {
 	// drawing points GL_POINTS: draws n points
 	glColor3f(1,0.1,0.1); // Red
 	glBegin(GL_POINTS);
-	// to complete ...
+	glVertex2f(0.5, 0.5);
+	glVertex2f(0.5, -0.5);
+	glVertex2f(-0.5, 0.5);
+	glVertex2f(-0.5, -0.5);
 	glEnd();
 }
 
@@ -58,7 +61,12 @@ void Display4() {
 	glColor3f(1,0.1,0.1); // Red
 	// polygon line drawing GL_LINE_STRIP: (v0, v1), (v1, v2), (v_ {n-2}, v_ {n-1})
 	glBegin(GL_LINE_STRIP);
-	// to complete ...
+	glVertex2f(1.0, 1.0);
+	glVertex2f(1.0, 0.8);
+	glVertex2f(1.0, 0.8);
+	glVertex2f(0.5, 0.5);
+	glVertex2f(0.5, 0.5);
+	glVertex2f(0.5, 0.3);
 	glEnd();
 }
 
@@ -66,7 +74,12 @@ void Display5() {
 	glColor3f(1,0.1,0.1); // Red
 	// dark polygonal line drawing GL_LINE_LOOP : (v0,v1), (v1,v2), (v_{n-1},v0)
 	glBegin(GL_LINE_LOOP);
-	// to complete ...
+	glVertex2f(1.0, 1.0);
+	glVertex2f(1.0, 0.8);
+	glVertex2f(1.0, 0.8);
+	glVertex2f(0.5, 0.5);
+	glVertex2f(0.5, 0.5);
+	glVertex2f(0.5, 0.3);
 	glEnd();
 }
 
@@ -74,21 +87,80 @@ void Display6() {
 	glColor3f(1,0.1,0.1); // Red
 	// drawing triangles GL_TRIANGLES : (v0,v1,v2), (v3,v4,v5), ...
 	glBegin(GL_TRIANGLES);
-	// to complete ...
+	glVertex2f(1.0, 1.0);
+	glVertex2f(1.0, 0.8);
+	glVertex2f(0.8, 0.8);
+	glVertex2f(-1.0, -1.0);
+	glVertex2f(-1.0, -0.8);
+	glVertex2f(-0.8, -0.8);
 	glEnd();
 }
 
 void Display7() {
 	// tracing rectangles GL_QUADS : (v0,v1,v2,v3), (v4,v5,v6,v7), ...
 	glBegin(GL_QUADS);
-	// to complete ...
+	glVertex2f(1.0, 1.0);
+	glVertex2f(1.0, 0.5);
+	glVertex2f(0.5, 0.5);
+	glVertex2f(0.3, 0.7);
 	glEnd();
 }
 
 void Display8() {
+	float l1 = 0.7;
+	float h1 = (l1 * sqrt(3)) / 2;
+	float x1 = h1 / sqrt(3);
+	float l2 = 0.45;
+	float h2 = (l2 * sqrt(3)) / 2;
+	float x2 = h2 / sqrt(3);
+	float z = 0.0;
+	
 	// convex polygon drawing GL_QUADS : (v0,v1,v2, ..., v_{n-1})
 	glBegin(GL_POLYGON);
-	// to complete ...
+	
+	glColor3f(0.2,0.15,0.88); // blue
+	glVertex2f(l1, z);
+	glVertex2f(l1 - x1, -h1);
+	glVertex2f(-l1 + x1, -h1);
+	glVertex2f(-l1, z);
+	glVertex2f(-l1 + x1, h1);
+	glVertex2f(l1 - x1, h1);
+	
+	glEnd();
+	
+	glBegin(GL_POLYGON);
+	
+	glColor3f(1, 1, 1); // white
+	glVertex2f(l2, z);
+	glVertex2f(l2 - x2, -h2);
+	glVertex2f(-l2 + x2, -h2);
+	glVertex2f(-l2, z);
+	glVertex2f(-l2 + x2, h2);
+	glVertex2f(l2 - x2, h2);
+	
+	glEnd();
+	
+	glBegin(GL_LINES);
+	
+	glColor3f(1,0.1,0.1); // Red
+	glVertex2f(l2, z);
+	glVertex2f(l2 - x2, -h2);
+	
+	glVertex2f(l2 - x2, -h2);
+	glVertex2f(-l2 + x2, -h2);
+	
+	glVertex2f(-l2 + x2, -h2);
+	glVertex2f(-l2, z);
+	
+	glVertex2f(-l2, z);
+	glVertex2f(-l2 + x2, h2);
+	
+	glVertex2f(-l2 + x2, h2);
+	glVertex2f(l2 - x2, h2);
+	
+	glVertex2f(l2 - x2, h2);
+	glVertex2f(l2, z);
+	
 	glEnd();
 }
 
