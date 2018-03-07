@@ -194,12 +194,12 @@ float distance(const float x){
 	return (suelo < techo) ? suelo : techo;
 }
 
-void Display3(){
+void Display3(){//////////////////////////////////////////////////////////////////////// todo
 	float point;
 	
 	point = 1.0;
 	
-	glBegin(GL_POINTS);
+	glBegin(GL_LINE_STRIP);
 	
 	glVertex2f(0.0, point);
 	
@@ -213,7 +213,7 @@ void Display3(){
 }
 
 void Display4(){
-	glColor3f(1,0.1,0.1); // rosu
+	glColor3f(1,0.1,0.1); // red
 	glBegin(GL_LINE_STRIP);
 	
 	double t,a,b;
@@ -228,6 +228,27 @@ void Display4(){
 		float y = 2 * (a * cos(t) + b) * sin(t);
 		
 		glVertex2f(x, y);
+	}
+	
+	glEnd();
+}
+
+// The trisectrix of Longchamps
+void Display5(){//////////////////////////////////////////////////////////////////////// todo
+	float x, y;
+	float t;
+	float a = 0.2;
+	const float pi = 3.14159265359;
+	
+	glBegin(GL_LINE_STRIP);
+	
+	for(t = -pi / 2; t < (pi / 2); t += 0.01){
+		if(t != (-pi / 6) && t != (pi / 6)){
+			x = a / (4 * (cos(t) * cos(t)) - 3);
+			y = (a * tan(t)) / (4 * cos(t) * cos(t) - 3);
+			
+			glVertex2f(x, y);
+		}
 	}
 	
 	glEnd();
@@ -253,6 +274,25 @@ void Display6(){
 	glEnd();
 }
 
+// The epicycloid
+void Display7(){
+	const float pi = 3.14159265359;
+	const float R = 0.1;
+	const float r = 0.3;
+	float x, y, t;
+	
+	glBegin(GL_LINE_STRIP);
+	
+	for(t = 0; t < (2 * pi); t += 0.01){
+		x = (R + r) * cos((r/R) * t) - r * cos(t + (r/ R) * t);
+		y = (R + r) * sin((r/R) * t) - r * sin(t + (r/ R) * t);
+		
+		glVertex2f(x, y);
+	}
+	
+	glEnd();
+}
+
 void Display8(){
 	glColor3f(1,0.1,0.1); // red
 	glBegin(GL_LINE_STRIP);
@@ -266,6 +306,40 @@ void Display8(){
 	for(t = 0; t < PI; t = t + radio){
 		float x = (R - r) * cos(r * t / R) - r * cos(t - r * t / R);
 		float y = (R - r) * sin(r * t / R) - r * sin(t - r * t / R);
+		
+		glVertex2f(x, y);
+	}
+	
+	glEnd();
+}
+
+// The lemniscate of Bernoulli
+void Display9(){
+	const float pi = 3.14159265359;
+	const float a = 0.4;
+	float r, t;
+	float x, y;
+	
+	glBegin(GL_LINE_STRIP);
+	
+	for(t = -(pi / 4); t < (pi / 4); t += 0.01){
+		r = -a * sqrt(2 * cos(2 * t));
+		
+		x = r * cos(t);
+		y = r * sin(t);
+		
+		glVertex2f(x, y);
+	}
+	
+	glEnd();
+	
+	glBegin(GL_LINE_STRIP);
+	
+	for(t = -(pi / 4); t < (pi / 4); t += 0.01){
+		r = a * sqrt(2 * cos(2 * t));
+		
+		x = r * cos(t);
+		y = r * sin(t);
 		
 		glVertex2f(x, y);
 	}
@@ -310,6 +384,7 @@ void Display(void) {
 	switch(prevKey) {
 		case '0':
 			Display0();
+			break;
 		case '1':
 			Display1();
 			break;
@@ -322,11 +397,21 @@ void Display(void) {
 		case '4':
 			Display4();
 			break;
+		case '5':
+			Display5();
+			break;
 		case '6':
 			Display6();
 			break;
+		case '7':
+			Display7();
+			break;
 		case '8':
 			Display8();
+			break;
+		case '9':
+			Display9();
+			break;
 		default:
 			break;
 	}
