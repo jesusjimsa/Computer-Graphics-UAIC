@@ -175,7 +175,7 @@ void Display2() {
 	 e^(-sin x) is in [1/e, e] and thus it is safe to use
 	 e^(1.1) as a scaling factor.
 	 **********************************/
-	glColor3f(1,0.1,0.1); // rosu
+	glColor3f(1,0.1,0.1); // red
 	glBegin(GL_LINE_STRIP);
 	for (double x = 0; x < xmax; x += ratia) {
 		double x1, y1;
@@ -187,6 +187,112 @@ void Display2() {
 	glEnd();
 }
 
+float distance(const float x){
+	const float suelo = x - floor(x);
+	const float techo = ceil(x) - x;
+	
+	return (suelo < techo) ? suelo : techo;
+}
+
+void Display3(){
+	float point;
+	
+	point = 1.0;
+	
+	glBegin(GL_POINTS);
+	
+	glVertex2f(0.0, point);
+	
+	for(float f = 0.1; f < 100; f += 0.1){
+		point = distance(f) / f;
+		
+		glVertex2f(point, f);
+	}
+	
+	glEnd();
+}
+
+void Display4(){
+	glColor3f(1,0.1,0.1); // rosu
+	glBegin(GL_LINE_STRIP);
+	
+	double t,a,b;
+	double PI = 4 * atan(1.0);
+	double radio = 0.05;
+	
+	a = 0.3;
+	b = 0.2;
+	
+	for(t = -PI; t < PI; t = t + radio){
+		float x = 2 * (a * cos(t) + b) * cos(t);
+		float y = 2 * (a * cos(t) + b) * sin(t);
+		
+		glVertex2f(x, y);
+	}
+	
+	glEnd();
+}
+
+void Display6(){
+	glColor3f(1,0.1,0.1); // red
+	glBegin(GL_LINE_STRIP);
+	
+	float t = -10.0;
+	float a = 0.1;
+	float b = 0.2;
+	
+	while(t < 100.0){
+		float x = a * t - b * sin(t);
+		float y = a - b * cos(t);
+		
+		glVertex2f(x, y);
+		
+		t = t + 0.01;
+	}
+	
+	glEnd();
+}
+
+void Display8(){
+	glColor3f(1,0.1,0.1); // red
+	glBegin(GL_LINE_STRIP);
+	
+	double t;
+	float R = 0.1;
+	float r = 0.3;
+	double PI = 2 * 4 * atan(1.0);
+	double radio = 0.05;
+	
+	for(t = 0; t < PI; t = t + radio){
+		float x = (R - r) * cos(r * t / R) - r * cos(t - r * t / R);
+		float y = (R - r) * sin(r * t / R) - r * sin(t - r * t / R);
+		
+		glVertex2f(x, y);
+	}
+	
+	glEnd();
+}
+
+void Display0(){
+	glColor3f(1,0.1,0.1); // red
+	glBegin(GL_LINE_STRIP);
+	
+	float t = 0.0;
+	float a = 0.02;
+	
+	while(t < 100.0){
+		double e = exp(1 + t);
+		double r = a * e;
+		float x = r * cos(t);
+		float y = r * sin(t);
+		
+		glVertex2f(x, y);
+		
+		t = t + 0.01;
+	}
+	
+	glEnd();
+}
 
 void Init(void) {
 	glClearColor(1.0,1.0,1.0,1.0);
@@ -202,12 +308,25 @@ void Display(void) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	switch(prevKey) {
+		case '0':
+			Display0();
 		case '1':
 			Display1();
 			break;
 		case '2':
 			Display2();
 			break;
+		case '3':
+			Display3();
+			break;
+		case '4':
+			Display4();
+			break;
+		case '6':
+			Display6();
+			break;
+		case '8':
+			Display8();
 		default:
 			break;
 	}
@@ -232,7 +351,6 @@ void MouseFunc(int button, int state, int x, int y) {
 }
 
 int main(int argc, char** argv) {
-	
 	glutInit(&argc, argv);
 	
 	glutInitWindowSize(dim, dim);
