@@ -131,7 +131,7 @@ void Display1() {
 	 the computation of the scaling factor.
 	 **********************************/
 	
-	glColor3f(1,0.1,0.1); // rosu
+	glColor3f(1,0.1,0.1); // red
 	glBegin(GL_LINE_STRIP);
 	for (t = - pi/2 + ratia; t < pi / 2; t += ratia) {
 		double x1, y1, x2, y2;
@@ -194,7 +194,7 @@ float distance(const float x){
 	return (suelo < techo) ? suelo : techo;
 }
 
-void Display3(){//////////////////////////////////////////////////////////////////////// todo
+void Display3(){
 	float point;
 	
 	point = 1.0;
@@ -203,10 +203,10 @@ void Display3(){////////////////////////////////////////////////////////////////
 	
 	glVertex2f(0.0, point);
 	
-	for(float f = 0.1; f < 100; f += 0.1){
+	for(float f = 0.01; f <= 100; f += 0.01){
 		point = distance(f) / f;
 		
-		glVertex2f(point, f);
+		glVertex2f(f / 100, point);
 	}
 	
 	glEnd();
@@ -234,20 +234,44 @@ void Display4(){
 }
 
 // The trisectrix of Longchamps
-void Display5(){//////////////////////////////////////////////////////////////////////// todo
+void Display5(){
 	float x, y;
 	float t;
 	float a = 0.2;
 	const float pi = 3.14159265359;
+	int wait = 2;
 	
-	glBegin(GL_LINE_STRIP);
-	
-	for(t = -pi / 2; t < (pi / 2); t += 0.01){
+	glBegin(GL_POINTS);
+	glPointSize(5);
+
+	for(t = -pi / 2; t < -(pi / 6); t += 0.01){
 		if(t != (-pi / 6) && t != (pi / 6)){
 			x = a / (4 * (cos(t) * cos(t)) - 3);
 			y = (a * tan(t)) / (4 * cos(t) * cos(t) - 3);
-			
+
 			glVertex2f(x, y);
+		}
+	}
+
+	glEnd();
+	
+	glBegin(GL_TRIANGLES);
+	
+	for(t = (-pi / 2) + 0.01; t < -(pi / 6); t += 0.01){
+		if(t != (-pi / 6) && t != (pi / 6)){
+			if(wait != 0){
+				x = a / (4 * (cos(t) * cos(t)) - 3);
+				y = (a * tan(t)) / (4 * cos(t) * cos(t) - 3);
+			
+				glVertex2f(x, y);
+				
+				wait--;
+			}
+			else{
+				glVertex2f(-1, 1);
+				
+				wait = 2;
+			}
 		}
 	}
 	
@@ -284,8 +308,8 @@ void Display7(){
 	glBegin(GL_LINE_STRIP);
 	
 	for(t = 0; t < (2 * pi); t += 0.01){
-		x = (R + r) * cos((r/R) * t) - r * cos(t + (r/ R) * t);
-		y = (R + r) * sin((r/R) * t) - r * sin(t + (r/ R) * t);
+		x = (R + r) * cos((r/R) * t) - r * cos(t + (r / R) * t);
+		y = (R + r) * sin((r/R) * t) - r * sin(t + (r / R) * t);
 		
 		glVertex2f(x, y);
 	}
