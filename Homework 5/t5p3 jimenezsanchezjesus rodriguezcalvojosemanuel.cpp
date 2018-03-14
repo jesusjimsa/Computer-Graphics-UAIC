@@ -321,14 +321,25 @@ public:
 		if (level == 0){
 		}
 		else{
-			v.rotate(30);
+			v.rotate(-30);
 			v.draw(p, length);
 			p1 = v.getDest(p, length);
 			FractalTree(length * division_factor, level - 1, division_factor, p1, v);
 			
-			v.rotate(-90);
+			v.rotate(90);
 			v.draw(p, length);
 			p1 = v.getDest(p, length);
+			p2 = p1;
+			
+			v.rotate(30);
+			v.draw(p1, length);
+			p1 = v.getDest(p1, length);
+			FractalTree(length * division_factor, level - 1, division_factor, p1, v);
+			
+			p1 = p2;
+			v.rotate(-45);
+			v.draw(p1, length);
+			p1 = v.getDest(p1, length);
 			p2 = p1;
 			
 			v.rotate(-30);
@@ -337,18 +348,7 @@ public:
 			FractalTree(length * division_factor, level - 1, division_factor, p1, v);
 			
 			p1 = p2;
-			v.rotate(45);
-			v.draw(p1, length);
-			p1 = v.getDest(p1, length);
-			p2 = p1;
-			
-			v.rotate(30);
-			v.draw(p1, length);
-			p1 = v.getDest(p1, length);
-			FractalTree(length * division_factor, level - 1, division_factor, p1, v);
-			
-			p1 = p2;
-			v.rotate(-90);
+			v.rotate(90);
 			v.draw(p1, length);
 			p1 = v.getDest(p1, length);
 			FractalTree(length * division_factor, level - 1, division_factor, p1, v);
@@ -357,7 +357,7 @@ public:
 	
 	void display(double length, int level){
 		CVector v(0.0, -1.0);
-		CPunct p(1.0, 3.0);
+		CPunct p(0.0, 3.0);
 		
 		v.draw(p, 0.25);
 		p = v.getDest(p, 0.25);
