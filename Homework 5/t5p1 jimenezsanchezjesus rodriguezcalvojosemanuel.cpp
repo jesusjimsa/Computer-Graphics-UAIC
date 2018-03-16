@@ -69,7 +69,7 @@ public:
 		im = im1;
 	}
 	
-	double getModul() {
+	double getMod() {
 		return sqrt(re * re + im * im);
 	}
 	
@@ -162,7 +162,7 @@ public:
 				break;
 			}
 			else{
-				if (z1.getModul() > m.modmax){
+				if (z1.getMod() > m.modmax){
 					// x does not belong to the J-F set because the
 					// iterative process converges infinitely
 					rez = 1;
@@ -286,8 +286,7 @@ public:
 				z1 = (z0 * z0) + m.c;
 			}
 			
-			
-			if(z1.getModul() > m.modmax){
+			if(z1.getMod() > m.modmax){
 				rez = 1;
 					
 				break;
@@ -313,7 +312,17 @@ public:
 				r = isIn(z);
 				
 				if(r == 0){
-					glVertex3d(x,y,0);
+					int iterations = 0;
+					
+					while(z.getMod() < 2 && iterations < m.nriter){
+						z = (z * z) + m.c;
+						
+						iterations++;
+					}
+					
+					if(iterations == m.nriter){
+						glVertex3d(x, y, 0);
+					}
 				}
 			}
 		}
