@@ -272,10 +272,10 @@ public:
 	int isIn(CComplex &x){
 		int rez = 0;
 		// an array for storing the values for computing z_n+1 = z_n * z_n + c
-		CComplex z0,z1;
+		CComplex z0, z1;
 		bool first = true;
 		
-		z0 = x;
+		z0 = CComplex();
 		
 		for (int i = 1; i < m.nriter; i++){
 			if(first){
@@ -283,7 +283,7 @@ public:
 				first = false;
 			}
 			else{
-				z1 = (z0 * z0) + m.c;
+				z1 = (z0 * z0) + x;
 			}
 			
 			if(z1.getMod() > m.modmax){
@@ -312,17 +312,7 @@ public:
 				r = isIn(z);
 				
 				if(r == 0){
-					int iterations = 0;
-					
-					while(z.getMod() < 2 && iterations < m.nriter){
-						z = (z * z) + m.c;
-						
-						iterations++;
-					}
-					
-					if(iterations == m.nriter){
-						glVertex3d(x, y, 0);
-					}
+					glVertex3d(x/2, y/2, 0);
 				}
 			}
 		}
