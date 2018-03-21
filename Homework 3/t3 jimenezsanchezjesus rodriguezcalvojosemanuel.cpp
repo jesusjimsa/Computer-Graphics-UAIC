@@ -102,54 +102,7 @@ public:
 	}
 };
 
-
-
-void drawNinePixels(double column, double row){
-	if(column >= -1.0 && row >= -1.0 && column <= 1.0 && row <= 1.0){
-		glBegin (GL_POINTS);
-		
-		glPointSize (100);
-		
-		glColor3f(0.0, 0.0, 0.0);
-		glVertex2f(0.0, 0.0);
-		
-		glEnd();
-	}
-}
-
-void Display1(double i_column, double j_row) {
-	glBegin(GL_LINES);
-	glColor3f(0.0, 0.0, 0.0);
-	
-	for(double columns = -1.0; columns < 1.0; columns += i_column) {
-		glVertex2f(-1.0, columns);
-		glVertex2f(1.0, columns);
-	}
-	
-	for(double rows = -1.0; rows < 1.0; rows += j_row) {
-		glVertex2f(rows, -1.0);
-		glVertex2f(rows, 1.0);
-	}
-	
-	glEnd();
-	
-	//for drawing red lines
-	glBegin(GL_LINES);
-	
-	glColor3f(1.0, 0.1, 0.1); // red
-	glVertex2f(-1.0, 1.0);
-	glVertex2f(1.0, 0.33);
-	
-	glEnd();
-	
-	for(double columns = -1.0; columns < 1.0; columns += i_column){
-		for(double rows = -1.0; rows < 1.0; rows += 3 * j_row){
-			drawNinePixels(columns, rows);
-		}
-	}
-}
-
-void Display2(){
+void Display1(){
 	CartesianGrid grid(20, 20);
 
 	grid.drawGrid();
@@ -177,10 +130,7 @@ void Display(void) {
 	
 	switch(prevKey) {
 		case '1':
-			Display1(0.1,0.1);
-			break;
-		case '2':
-			Display2();
+			Display1();
 			break;
 	}
 	
