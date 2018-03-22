@@ -77,7 +77,9 @@ public:
 	
 	void mark(){
 		glBegin(GL_POINTS);
+		
 		glVertex2d(m.x, m.y);
+		
 		glEnd();
 	}
 	
@@ -93,8 +95,7 @@ public:
 		normalization();
 	}
 	
-	CVector(double x, double y) : C2coord(x, y)
-	{
+	CVector(double x, double y) : C2coord(x, y){
 		normalization();
 	}
 	
@@ -134,8 +135,10 @@ public:
 		
 		glColor3f(1.0, 0.1, 0.1);
 		glBegin(GL_LINE_STRIP);
+		
 		glVertex2d(x, y);
 		glVertex2d(x + m.x * length, y + m.y * length);
+		
 		glEnd();
 	}
 	
@@ -158,18 +161,22 @@ class CKochCurve{
 public:
 	void segmentKoch(double length, int level, CPunct &p, CVector v){
 		CPunct p1;
+		
 		if (level == 0){
 			v.draw(p, length);
 		}
 		else{
 			segmentKoch(length / 3.0, level - 1, p, v);
 			p1 = v.getDest(p, length / 3.0);
+			
 			v.rotate(60);
 			segmentKoch(length / 3.0, level - 1, p1, v);
 			p1 = v.getDest(p1, length / 3.0);
+			
 			v.rotate(-120);
 			segmentKoch(length / 3.0, level - 1, p1, v);
 			p1 = v.getDest(p1, length / 3.0);
+			
 			v.rotate(60);
 			segmentKoch(length / 3.0, level - 1, p1, v);
 		}
@@ -312,15 +319,213 @@ public:
 	}
 };
 
+class CSquares{
+public:
+	void drawSquare(float tam, float cx, float cy){
+		glBegin(GL_LINE_STRIP);
+		
+		glVertex2f(cx - tam, cy + tam);
+		glVertex2f(cx + tam, cy + tam);
+		
+		glVertex2f(cx + tam, cy + tam);
+		glVertex2f(cx + tam, cy - tam);
+		
+		glVertex2f(cx + tam, cy - tam);
+		glVertex2f(cx - tam, cy - tam);
+		
+		glVertex2f(cx - tam, cy - tam);
+		glVertex2f(cx - tam, cy + tam);
+		
+		glEnd();
+	}
+	
+	void prepareSquares(float tam, float cx, float cy, int level){
+		if(level >= 0){
+			float sep = (tam / 2) + (tam / 6) + 1.5 * tam;
+			
+			tam = tam / 3;
+			
+			drawSquare(tam,cx+sep ,cy);
+			
+			if(level > 1){
+				prepareSquares(tam, cx + sep, cy, level - 1);
+			}
+			
+			drawSquare(tam, cx + sep, cy + sep);
+			
+			if(level > 1){
+				prepareSquares(tam, cx + sep, cy + sep, level - 1);
+			}
+			
+			drawSquare(tam, cx, cy + sep);
+			
+			if(level > 1){
+				prepareSquares(tam, cx, cy + sep, level - 1);
+			}
+			
+			drawSquare(tam, cx - sep, cy + sep);
+			
+			if(level > 1){
+				prepareSquares(tam, cx - sep, cy + sep, level - 1);
+			}
+			
+			drawSquare(tam, cx - sep, cy);
+			
+			if(level > 1){
+				prepareSquares(tam, cx - sep, cy, level - 1);
+			}
+			
+			drawSquare(tam, cx - sep, cy - sep);
+			
+			if(level > 1){
+				prepareSquares(tam, cx - sep, cy - sep, level - 1);
+			}
+			
+			drawSquare(tam, cx, cy - sep);
+			
+			if(level > 1){
+				prepareSquares(tam, cx, cy - sep, level - 1);
+			}
+			
+			drawSquare(tam,cx+sep,cy-sep);
+			
+			if(level > 1){
+				prepareSquares(tam,cx+sep,cy-sep,level-1);
+			}
+		}
+	}
+	
+	void squares(double lungime, int nivel, CPunct &p, CVector &v, int d){
+		if (nivel != 0){
+			drawSquare(0.3, 0.0, 0.0);
+			prepareSquares(0.3, 0.0, 0.0, nivel);
+		}
+	}
+	
+	void afisare(double lungime, int nivel){
+		CVector v(0.0, 1.0);
+		CPunct p(0.0, 0.0);
+		
+		squares(lungime, nivel, p, v, 1);
+	}
+};
+
+
+
+class CHalfHex{
+public:
+	void mediohexagonup(double x1, double y1, double x2, double y2, int level){
+		double length = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+		double radius = length / 2;
+		double first_x, first_y, second_x, second_y;
+		
+		CPunct c1(x1, y1);
+		CPunct c2(x2, y2);
+		CVector v1(x2 - x1, y2 - y1);
+		v1.rotate(60);
+		CPunct p1 = v1.getDest(c1, radius);
+		
+		p1.getxy(first_x, first_y);
+		
+		CVector v2(x2 - x1, y2 - y1);
+		v2.rotate(120);
+		CPunct p2 = v2.getDest(c2, radius);
+		
+		p2.getxy(second_x, second_y);
+		
+		if (level == 1){
+			glBegin(GL_LINE_STRIP);
+			glColor3f(1.0, 0.1, 0.1);
+			
+			glVertex2f(x2, y2);
+			glVertex2f(second_x, second_y);
+			
+			glVertex2f(second_x, second_y);
+			glVertex2f(first_x, first_y);
+			
+			glVertex2f(first_x, first_y);
+			glVertex2f(x1, y1);
+			
+			glEnd();
+		}
+		else{
+			mediohexagonup(x2, y2, second_x, second_y, level - 1);
+			mediohexagondown(second_x, second_y, first_x, first_y, level - 1);
+			mediohexagonup(first_x, first_y, x1, y1, level - 1);
+		}
+	}
+	
+	void mediohexagondown(double x1, double y1, double x2, double y2, int level){
+		double longitud = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+		double radio = longitud / 2;
+		
+		double first_x, first_y, second_x, second_y;
+		CPunct c1(x1, y1);
+		CPunct c2(x2, y2);
+		CVector v1(x2 - x1, y2 - y1);
+		
+		v1.rotate(300);
+		CPunct p1 = v1.getDest(c1, radio);
+		p1.getxy(first_x, first_y);
+		
+		CVector v2(x2 - x1, y2 - y1);
+		v2.rotate(240);
+		CPunct p2 = v2.getDest(c2, radio);
+		
+		p2.getxy(second_x, second_y);
+		
+		if (level == 1){
+			glBegin(GL_LINE_STRIP);
+			glColor3f(1.0, 0.1, 0.1);
+			
+			glVertex2f(x2, y2);
+			glVertex2f(second_x, second_y);
+			
+			glVertex2f(second_x, second_y);
+			glVertex2f(first_x, first_y);
+			
+			glVertex2f(first_x, first_y);
+			glVertex2f(x1, y1);
+			
+			glEnd();
+		}
+		else{
+			mediohexagondown(x2, y2, second_x, second_y, level - 1);
+			mediohexagonup(second_x, second_y, first_x, first_y, level - 1);
+			mediohexagondown(first_x, first_y, x1, y1, level - 1);
+		}
+	}
+	
+	void halfHex(double length, int level, CPunct &p, CVector &v, int d){
+		if (level == 0){
+			glBegin(GL_LINE_STRIP);
+			glColor3f(1.0, 0.1, 0.1);
+			
+			glVertex2f(-0.5, 0.5);
+			glVertex2f(-0.5, -0.5);
+			
+			glEnd();
+		}
+		else{
+			mediohexagonup(-0.5, 0.5, -0.5, -0.5, level);
+		}
+	}
+	
+	void draw(double lungime, int nivel){
+		CVector v(0.0, 1.0);
+		CPunct p(0.0, 0.0);
+		
+		halfHex(lungime, nivel, p, v, 1);
+	}
+};
+
 class NewFractalTree{
 public:
 	void FractalTree(double length, int level, double division_factor, CPunct p, CVector v){
 		assert(division_factor != 0);
 		CPunct p1, p2;
 		
-		if (level == 0){
-		}
-		else{
+		if (level != 0){
 			v.rotate(-30);
 			v.draw(p, length);
 			p1 = v.getDest(p, length);
@@ -514,7 +719,36 @@ void Display4(){
 	level++;
 }
 
-// displays fractal tree (again?)
+void Display5(){
+	CSquares cch;
+	cch.afisare(0.05, level);
+	
+	char c[3];
+	sprintf(c, "%2d", level);
+	
+	glRasterPos2d(-0.98,-0.98);
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'L');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'v');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'l');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, '=');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[0]);
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[1]);
+	
+	glRasterPos2d(-1.0,-0.9);
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'S');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'q');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'u');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'r');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 's');
+	
+	level++;
+}
+
+// displays fractal tree
 void Display6(){
 	NewFractalTree tree;
 	
@@ -554,8 +788,41 @@ void Display6(){
 	level++;
 }
 
-void Init(void) {
+void Display7(){
+	CHalfHex cch;
+	cch.draw(0.05, level);
 	
+	char c[3];
+	sprintf(c, "%2d", level);
+	
+	glRasterPos2d(-0.98, -0.98);
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'L');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'v');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'l');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, '=');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[0]);
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[1]);
+	
+	glRasterPos2d(-1.0, -0.9);
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'H');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'l');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'f');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, ' ');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'h');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'x');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'a');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'g');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'o');
+	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'n');
+	
+	level++;
+}
+
+void Init(void) {
 	glClearColor(1.0,1.0,1.0,1.0);
 	
 	glLineWidth(1);
@@ -593,9 +860,19 @@ void Display(void){
 			Display4();
 			
 			break;
+		case '5':
+			glClear(GL_COLOR_BUFFER_BIT);
+			Display5();
+			
+			break;
 		case '6':
 			glClear(GL_COLOR_BUFFER_BIT);
 			Display6();
+			
+			break;
+		case '7':
+			glClear(GL_COLOR_BUFFER_BIT);
+			Display7();
 			
 			break;
 		default:
@@ -611,8 +888,11 @@ void Reshape(int w, int h){
 
 void KeyboardFunc(unsigned char key, int x, int y){
 	prevKey = key;
-	if (key == 27)
+	
+	if (key == 27){
 		exit(0);
+	}
+	
 	glutPostRedisplay();
 }
 
