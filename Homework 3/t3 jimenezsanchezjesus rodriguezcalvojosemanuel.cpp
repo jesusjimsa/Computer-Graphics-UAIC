@@ -38,6 +38,14 @@ public:
 		increment_rows = 2.0 / n_rows;
 	}
 	
+	int getRows(){
+		return n_rows;
+	}
+	
+	int getColumns(){
+		return n_columns;
+	}
+	
 	void drawGrid(){
 		glBegin(GL_LINES);
 		glColor3f(0.0, 0.0, 0.0);
@@ -85,7 +93,7 @@ public:
 			float translated_end_y = (float)end_y / (float)(n_columns / 2);
 			
 			glColor3f(1.0, 0.0, 0.0); // red
-			glLineWidth(4);
+			glLineWidth(3);
 			
 			glBegin(GL_LINES);
 			
@@ -93,6 +101,8 @@ public:
 			glVertex2f(translated_end_x, translated_end_y);
 			
 			glEnd();
+			
+			glLineWidth(1);
 			
 			cout << "Line from (" << begin_x << ", " << begin_y << ") to (" << end_x << ", " << end_y << ") drawn succesfully" << endl;
 		}
@@ -102,16 +112,40 @@ public:
 	}
 };
 
+void pixelIntersectionUp(CartesianGrid &grid){
+	int p_row = grid.getRows() / 2;
+
+	for(int i = -grid.getColumns() / 2; i <= grid.getColumns() / 2; i += 3){
+		for(int j = i - 4; j <= i + 4; j++){
+			grid.writePixel(j, p_row);
+		}
+
+		p_row--;
+	}
+}
+
+void pixelIntersectionDown(CartesianGrid &grid){
+	int p_row = -grid.getRows() / 2;
+	
+	for(int i = -grid.getColumns() / 2; i <= grid.getColumns() / 2; i += 2){
+		grid.writePixel(i, p_row);
+		grid.writePixel(i + 1, p_row);
+		
+		p_row++;
+	}
+}
+
 void Display1(){
-	CartesianGrid grid(20, 20);
+	int n_rows = 24;
+	int n_columns = 24;
+	CartesianGrid grid(n_rows, n_columns);
 
 	grid.drawGrid();
-	grid.writePixel(0, 0);
-	grid.drawLine(0, 0, 10, 10);
-	grid.writePixel(10, 10);
-	grid.writePixel(2, 2);
-	grid.writePixel(4, 3);
-	grid.writePixel(-1, -5);
+	grid.drawLine(-n_columns / 2, n_rows / 2, n_columns / 2, n_rows / 6);
+	pixelIntersectionUp(grid);
+	
+	grid.drawLine(-n_columns / 2, -n_rows / 2, n_columns / 2, (-n_rows / 24) + 1);
+	pixelIntersectionDown(grid);
 }
 
 void Init(void) {
