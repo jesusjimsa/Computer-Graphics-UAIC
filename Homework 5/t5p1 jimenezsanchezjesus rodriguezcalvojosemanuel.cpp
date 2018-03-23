@@ -312,7 +312,14 @@ public:
 				r = isIn(z);
 				
 				if(r == 0){
-					glVertex3d(x/2, y/2, 0);
+					glVertex3d(x / 2, y / 2, 0);
+				}
+				else{
+					glColor3f(0.001, 0.001, 0.001); // black
+					
+					glVertex3d(x, y, 0);
+					
+					glColor3f(1.0, 0.0, 0.0); // red
 				}
 			}
 		}
