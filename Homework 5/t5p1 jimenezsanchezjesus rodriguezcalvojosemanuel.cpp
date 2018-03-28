@@ -324,8 +324,6 @@ public:
 			}
 		}
 		
-		fprintf(stdout, "STOP\n");
-		
 		glEnd();
 		
 		glPopMatrix();
