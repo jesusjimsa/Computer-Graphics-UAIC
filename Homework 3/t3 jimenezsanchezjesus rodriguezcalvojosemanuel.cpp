@@ -112,17 +112,37 @@ public:
 	}
 };
 
-void pixelIntersectionUp(CartesianGrid &grid){
-	int p_row = grid.getRows() / 2;
-
-	for(int i = -grid.getColumns() / 2; i <= grid.getColumns() / 2; i += 3){
-		for(int j = i - 4; j <= i + 4; j++){
-			grid.writePixel(j, p_row);
+bool pertenece(int i,int j, int x1,int y1,int x2,int y2){
+	if(i==x1 && j==y1){return true;}
+	else{
+		if(i==x2 && j==y2){return true;}
+		else{	
+				double derecha, izquierda;
+				if(i-x1==0){return false;}
+				else{derecha=(j-y1);
+					derecha=derecha/(i-x1);}
+				if(x2-x1==0){return false;}
+				else{izquierda=(y2-y1);
+					izquierda=izquierda/(x2-x1);}
+			if(izquierda-derecha==0){return true;}
+			else{return false;}
 		}
-
-		p_row--;
 	}
 }
+
+void pixelIntersectionUp(CartesianGrid &grid,int x1, int y1,int x2,int y2){
+	for(double t=-4;t<=4;t++){
+		for(int i = -grid.getColumns() / 2; i <=grid.getColumns() / 2; i ++){
+			for(int j= -grid.getColumns() / 2; j <=grid.getColumns() / 2; j++){
+						
+					if(pertenece(i,j,x1+t,y1,x2+t,y2)){
+						grid.writePixel(i,j);
+					}
+			}
+		}
+	}
+}
+
 
 void pixelIntersectionDown(CartesianGrid &grid){
 	int p_row = -grid.getRows() / 2;
@@ -142,7 +162,7 @@ void Display1(){
 
 	grid.drawGrid();
 	grid.drawLine(-n_columns / 2, n_rows / 2, n_columns / 2, n_rows / 6);
-	pixelIntersectionUp(grid);
+	pixelIntersectionUp(grid,-n_columns / 2, n_rows / 2, n_columns / 2, n_rows / 6);
 	
 	grid.drawLine(-n_columns / 2, -n_rows / 2, n_columns / 2, (-n_rows / 24) + 1);
 	pixelIntersectionDown(grid);
