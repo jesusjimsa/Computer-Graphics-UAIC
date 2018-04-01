@@ -144,15 +144,40 @@ void pixelIntersectionUp(CartesianGrid &grid,int x1, int y1,int x2,int y2){
 }
 
 
-void pixelIntersectionDown(CartesianGrid &grid){
-	int p_row = -grid.getRows() / 2;
-	
-	for(int i = -grid.getColumns() / 2; i <= grid.getColumns() / 2; i += 2){
-		grid.writePixel(i, p_row);
-		grid.writePixel(i + 1, p_row);
+double aplicarfomula(int j,int x1, int y1,int x2,int y2){
+		double i;
+		i=(j-y1)*(x2-x1);
+		i=i/(y2-y1);
+		i=i+x1;
+		return i;
+}
+pair<int,int> acerca(CartesianGrid &grid, double j){
 		
-		p_row++;
-	}
+	int t1=(int)j;
+	if(j<0){j=j-1;}else{j=j+1;}
+	 int t2=(int)j;
+	pair<int,int> sol(t1,t2);
+	return sol;
+}
+
+
+void pixelIntersectionDown(CartesianGrid &grid,int x1, int y1,int x2,int y2 ){
+		int arriba,abajo;		
+		if(y1>y2){arriba=x1;abajo=x2;}
+		else{arriba=x2;abajo=x1;}		
+		for (int i=abajo;i<=arriba;i=i+1){
+				double pj=aplicarfomula(i,x1,y1,x2,y2);
+				int pjx=pj;
+				double tjx=pjx*1.0;				
+				if(tjx==pj){grid.writePixel(pj,i);}
+				else{
+					cout<<pj<<endl<<endl;
+					pair<int,int> sol=acerca(grid,pj);
+					grid.writePixel(sol.first,i);
+					grid.writePixel(sol.second,i);	
+				}
+		}
+
 }
 
 void Display1(){
@@ -164,8 +189,8 @@ void Display1(){
 	grid.drawLine(-n_columns / 2, n_rows / 2, n_columns / 2, n_rows / 6);
 	pixelIntersectionUp(grid,-n_columns / 2, n_rows / 2, n_columns / 2, n_rows / 6);
 	
-	grid.drawLine(-n_columns / 2, -n_rows / 2, n_columns / 2, (-n_rows / 24) + 1);
-	pixelIntersectionDown(grid);
+	grid.drawLine(-n_columns / 2, -n_rows / 2, n_columns / 2, (-n_rows / 24) + 2);
+	pixelIntersectionDown(grid,-n_columns / 2, -n_rows / 2, n_columns / 2, (-n_rows / 24) + 2);
 }
 
 void Init(void) {
