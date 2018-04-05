@@ -6,11 +6,23 @@
 #include<iostream>
 #include "GL/glut.h"
 #include <map>
+#include <list>
+#include <fstream>
+#include<sstream>
+#include<iterator>
+#include <vector>
+
 using namespace std;
 
 // window size
 #define dim 300
 #define PI 3.141594
+#define MIN(x,y) (x < y ? x : y)
+#define MAX(x,y) (x > y ? x : y)
+
+typedef struct {
+double x,y;
+} Point;
 
 
 unsigned char prevKey;
@@ -157,7 +169,6 @@ public:
 		}
 	}
 };
-
 
 
 void Display1(){
@@ -424,6 +435,112 @@ DrawEllipse(centroX,centroY,altura,anchura,60);
 DrawPoints(grid,centroX,centroY,altura,anchura,60);
 }
 
+bool InsidePolygon2(vector<pair<int,int> > polygon,int N,pair<int,int> p){
+int counter = 0;
+int i;
+double xinters;
+pair<int,int> p1,p2;
+
+p1 = polygon[0];
+for (i=1;i<=N;i++) {
+   p2 = polygon[i % N];
+   if (p.second > MIN(p1.second,p2.second)) {
+   if (p.second <= MAX(p1.second,p2.second)) {
+      if (p.first < MAX(p1.first,p2.first)) {
+          if (p1.second != p2.second) {
+              xinters = (p.second-p1.second)*(p2.first-p1.first)/(p2.second-p1.second)+p1.first;
+              if (p1.first == p2.first || p.first <= xinters)
+                counter++;
+              }
+           }
+       }
+    }
+   p1 = p2;
+}
+
+if (counter % 2 == 0)
+return(false);
+else
+return(true);
+}
+
+bool InsidePolygon1(vector<pair<int,int> > polygon,int N,pair<int,int> p){
+int counter = 0;
+int i;
+double xinters;
+pair<int,int> p1,p2;
+
+p1 = polygon[0];
+for (i=0;i<=N;i++) {
+   p2 = polygon[i % N];
+   if (p.second > MIN(p1.second,p2.second)) {
+   if (p.second <= MAX(p1.second,p2.second)) {
+      if (p.first <= MAX(p1.first,p2.first)) {
+          if (p1.second != p2.second) {
+              xinters = (p.second-p1.second)*(p2.first-p1.first)/(p2.second-p1.second)+p1.first;
+              if (p1.first == p2.first || p.first <= xinters)
+                counter++;
+              }
+           }
+       }
+    }
+   p1 = p2;
+}
+
+if (counter % 2 == 0)
+return(false);
+else
+return(true);
+}
+
+
+void Display3(){
+	int n_rows = 24;
+	int n_columns = 24;
+	CartesianGridTra grid(n_rows, n_columns);
+	grid.drawGrid();
+list<pair<int,int> > myset;
+
+		ifstream fe("archivo.txt");
+		string ta;getline(fe,ta);
+		stringstream sta;sta.str(ta);
+		int tamanyo;sta>>tamanyo;
+		int principioX,principioY;
+		for(int i=0;i<tamanyo;i++){
+			string t;getline(fe,t);
+			stringstream ss;ss.str(t);
+			int x;ss>>x;
+			int y;ss>>y;
+			cout<<x<<"		"<<y<<endl;
+			pair<int,int> p(x,y);
+			myset.push_back(p);
+		}
+
+		list<pair<int,int> >::iterator it;
+		list<pair<int,int> >::iterator fin=myset.end();
+		fin--;
+		for(it=myset.begin();it!=fin;it++){
+			list<pair<int,int> >::iterator sig=it;sig++;
+			grid.drawLine((*it).first,(*it).second,(*sig).first,(*sig).second);
+			grid.writePixel((*it).first,(*it).second);
+		}
+		grid.writePixel((*it).first,(*it).second);
+		grid.drawLine((*it).first,(*it).second,(*myset.begin()).first,(*myset.begin()).second);
+
+
+		vector<pair<int, int> > v(myset.begin(),myset.end());
+		for(int x1=-grid.getColumns();x1<=grid.getColumns();x1++){
+				for(int y1=-grid.getRows();y1<=grid.getRows();y1++){
+						pair<int,int> p1(x1,y1);
+						if(InsidePolygon1(v,v.size(),p1) or InsidePolygon2(v,v.size(),p1) ){
+								grid.writePixel(x1,y1);
+
+						}
+		}
+}
+
+}
+
 
 void Init(void) {
 
@@ -450,7 +567,11 @@ void Display(void) {
 			Display2();
 			break;
 	}
-
+	switch(prevKey) {
+		case '3':
+			Display3();
+			break;
+	}
 	glFlush();
 }
 
