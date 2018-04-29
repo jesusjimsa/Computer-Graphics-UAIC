@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <iostream>
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -11,11 +12,13 @@
 // the size of the window measured in pixels
 #define dim 300
 
+using namespace std;
+
 unsigned char prevKey;
 
-enum EObiect {cubw, cubs, sferaw, sferas} ob = cubw;
+enum EObiect{cubw, cubs, sferaw, sferas, triangle} ob = cubw;
 
-void DisplayAxe() {
+void DisplayAxe(){
 	int X, Y, Z;
 	X = Y = 200;
 	Z = 200;
@@ -25,49 +28,61 @@ void DisplayAxe() {
 	// Ox axis - green
 	glColor3f(0, 1, 0);
 	glBegin(GL_LINE_STRIP);
-	glVertex3f(0,0,0);
-	glVertex3f(X,0,0);
+	glVertex3f(0, 0, 0);
+	glVertex3f(X, 0, 0);
 	glEnd();
 	
 	// Oy axis - blue
 	glColor3f(0, 0, 1);
 	glBegin(GL_LINE_STRIP);
-	glVertex3f(0,0,0);
-	glVertex3f(0,Y,0);
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, Y, 0);
 	glEnd();
 	
 	// Oz axis - red
 	glColor3f(1, 0, 0);
 	glBegin(GL_LINE_STRIP);
-	glVertex3f(0,0,0);
-	glVertex3f(0,0,Z);
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, 0, Z);
 	glEnd();
 	
 	glLineWidth(1);
 }
 
 // wireframe cube
-void Display1() {
-	glColor3f(1,0,0);
+void Display1(){
+	glColor3f(1, 0, 0);
 	glutWireCube(1);
 }
 
 // solid cube
-void Display2() {
-	glColor3f(1,0,0);
+void Display2(){
+	glColor3f(1, 0, 0);
 	glutSolidCube(1);
 }
 
 // wireframe sphere
-void Display3() {
-	glColor3f(0,0,1);
+void Display3(){
+	glColor3f(0, 0, 1);
 	glutWireSphere(1, 10, 10);
 }
 
 // solid sphere
-void Display4() {
-	glColor3f(0,0,1);
+void Display4(){
+	glColor3f(0, 0, 1);
 	glutSolidSphere(1, 10, 10);
+}
+
+void Display5(){
+	glColor3f(1, 0, 0);
+	
+	glBegin(GL_TRIANGLES);
+	
+	glVertex3f(6.0, 5.0, 3.0);
+	glVertex3f(0.0, 3.0, 3.0);
+	glVertex3f(0.0, 9.0, 3.0);
+	
+	glEnd();
 }
 
 void DisplayObiect(){
@@ -83,6 +98,9 @@ void DisplayObiect(){
 			break;
 		case sferas:
 			Display4();
+			break;
+		case triangle:
+			Display5();
 			break;
 		default:
 			break;
@@ -161,6 +179,10 @@ void Display(void) {
 			Display4();
 			ob = sferas;
 			break;
+		case '5':
+			Display5();
+			ob = triangle;
+			break;
 		case 'x':
 			glClear(GL_COLOR_BUFFER_BIT);
 			DisplayX();
@@ -205,8 +227,9 @@ void Reshape(int w, int h) {
 void KeyboardFunc(unsigned char key, int x, int y) {
 	prevKey = key;
 	
-	if (key == 27)
+	if (key == 27){
 		exit(0);
+	}
 	
 	glutPostRedisplay();
 }
@@ -215,7 +238,6 @@ void MouseFunc(int button, int state, int x, int y) {
 }
 
 int main(int argc, char** argv) {
-	
 	glutInit(&argc, argv);
 	
 	glutInitWindowSize(dim, dim);
