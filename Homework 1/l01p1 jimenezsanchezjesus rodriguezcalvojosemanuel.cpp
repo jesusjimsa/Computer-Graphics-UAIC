@@ -34,7 +34,9 @@ void Display1() {
 
 void Display2() {
 	glColor3f(1,0.1,0.1); // Red
+	
 	glBegin(GL_LINES);
+	
 	glVertex2f(1.0,1.0);
 	glVertex2f(0.9,0.9);
 	glVertex2f(0.8,0.8);
@@ -43,66 +45,81 @@ void Display2() {
 	glVertex2f(0.5,0.5);
 	glVertex2f(-0.5,-0.5);
 	glVertex2f(-1.0,-1.0);
+	
 	glEnd();
 }
 
 void Display3() {
 	// drawing points GL_POINTS: draws n points
 	glColor3f(1,0.1,0.1); // Red
+	
 	glBegin(GL_POINTS);
+	
 	glVertex2f(0.5, 0.5);
 	glVertex2f(0.5, -0.5);
 	glVertex2f(-0.5, 0.5);
 	glVertex2f(-0.5, -0.5);
+	
 	glEnd();
 }
 
 void Display4() {
 	glColor3f(1,0.1,0.1); // Red
+	
 	// polygon line drawing GL_LINE_STRIP: (v0, v1), (v1, v2), (v_ {n-2}, v_ {n-1})
 	glBegin(GL_LINE_STRIP);
+	
 	glVertex2f(1.0, 1.0);
 	glVertex2f(1.0, 0.8);
 	glVertex2f(1.0, 0.8);
 	glVertex2f(0.5, 0.5);
 	glVertex2f(0.5, 0.5);
 	glVertex2f(0.5, 0.3);
+	
 	glEnd();
 }
 
 void Display5() {
 	glColor3f(1,0.1,0.1); // Red
+	
 	// dark polygonal line drawing GL_LINE_LOOP : (v0,v1), (v1,v2), (v_{n-1},v0)
 	glBegin(GL_LINE_LOOP);
+	
 	glVertex2f(1.0, 1.0);
 	glVertex2f(1.0, 0.8);
 	glVertex2f(1.0, 0.8);
 	glVertex2f(0.5, 0.5);
 	glVertex2f(0.5, 0.5);
 	glVertex2f(0.5, 0.3);
+	
 	glEnd();
 }
 
 void Display6() {
 	glColor3f(1,0.1,0.1); // Red
+	
 	// drawing triangles GL_TRIANGLES : (v0,v1,v2), (v3,v4,v5), ...
 	glBegin(GL_TRIANGLES);
+	
 	glVertex2f(1.0, 1.0);
 	glVertex2f(1.0, 0.8);
 	glVertex2f(0.8, 0.8);
 	glVertex2f(-1.0, -1.0);
 	glVertex2f(-1.0, -0.8);
 	glVertex2f(-0.8, -0.8);
+	
 	glEnd();
 }
 
 void Display7() {
 	// tracing rectangles GL_QUADS : (v0,v1,v2,v3), (v4,v5,v6,v7), ...
 	glBegin(GL_QUADS);
+	
 	glVertex2f(1.0, 1.0);
 	glVertex2f(1.0, 0.5);
 	glVertex2f(0.5, 0.5);
 	glVertex2f(0.3, 0.7);
+	
 	glEnd();
 }
 
