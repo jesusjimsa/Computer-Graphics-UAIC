@@ -16,7 +16,7 @@ using namespace std;
 
 unsigned char prevKey;
 
-enum EObiect{cubw, cubs, sferaw, sferas, triangle} ob = cubw;
+enum EObiect{cubw, cubs, sferaw, sferas, triangle, asked_cube} ob = cubw;
 
 void DisplayAxe(){
 	int X, Y, Z;
@@ -79,10 +79,35 @@ void Display5(){
 	glBegin(GL_TRIANGLES);
 	
 	glVertex3f(6.0, 5.0, 3.0);
-	glVertex3f(0.0, 3.0, 3.0);
-	glVertex3f(0.0, 9.0, 3.0);
+	glVertex3f(0.0, 0.0, 1.0);
+	glVertex3f(0.0, 0.0, 5.0);
 	
 	glEnd();
+}
+
+void Display6(){
+	glLineWidth(2);
+	glColor3f(0, 0, 0);
+	
+	// Transformations for placing the cube in the right place
+	glRotatef(45, 0, 0, 1);
+	glRotatef(45, 0, 1, 0);
+	glRotatef(18, 0, 0, 1);
+	glRotatef(10, 0, 1, 0);
+	glRotatef(5, 1, 0, 0);
+	glTranslatef(0.85, 0.85, 0.85);
+	
+	// Drawing the cube with the right size
+	glutWireCube(1.7);
+	
+	// lacing everything where it was
+	glTranslatef(-0.85, -0.85, -0.85);
+	glRotatef(-5, 1, 0, 0);
+	glRotatef(-10, 0, 1, 0);
+	glRotatef(-18, 0, 0, 1);
+	glRotatef(-45, 0, 1, 0);
+	glRotatef(-45, 0, 0, 1);
+	
 }
 
 void DisplayObiect(){
@@ -101,6 +126,9 @@ void DisplayObiect(){
 			break;
 		case triangle:
 			Display5();
+			break;
+		case asked_cube:
+			Display6();
 			break;
 		default:
 			break;
@@ -123,6 +151,12 @@ void DisplayY() {
 void DisplayZ() {
 	glMatrixMode(GL_MODELVIEW);
 	glRotated(10, 0, 0, 1);
+}
+
+// the rotation with 10 degrees about the all axes
+void DisplayP() {
+	glMatrixMode(GL_MODELVIEW);
+	glRotated(10, 1, 1, 1);
 }
 
 // translation by 0.2, 0.2, 0.2
@@ -183,6 +217,10 @@ void Display(void) {
 			Display5();
 			ob = triangle;
 			break;
+		case '6':
+			Display6();
+			ob = asked_cube;
+			break;
 		case 'x':
 			glClear(GL_COLOR_BUFFER_BIT);
 			DisplayX();
@@ -210,6 +248,12 @@ void Display(void) {
 		case 's':
 			glClear(GL_COLOR_BUFFER_BIT);
 			DisplayS();
+			DisplayAxe();
+			DisplayObiect();
+			break;
+		case 'p':
+			glClear(GL_COLOR_BUFFER_BIT);
+			DisplayP();
 			DisplayAxe();
 			DisplayObiect();
 			break;
