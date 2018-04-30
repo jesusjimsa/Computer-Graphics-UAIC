@@ -100,7 +100,7 @@ void Display6(){
 	// Drawing the cube with the right size
 	glutWireCube(1.7);
 	
-	// lacing everything where it was
+	// Placing everything where it was before
 	glTranslatef(-0.85, -0.85, -0.85);
 	glRotatef(-5, 1, 0, 0);
 	glRotatef(-10, 0, 1, 0);
