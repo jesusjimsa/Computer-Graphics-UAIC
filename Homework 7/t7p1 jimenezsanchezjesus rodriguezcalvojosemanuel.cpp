@@ -19,7 +19,7 @@ GLdouble lat = 5;
 void parallelProjection(unsigned char);
 void DisplayAxe();
 void InitObiect();
-void DisplayObiect();
+void DisplayObject();
 
 void Init(void){
 	glClearColor(1, 1, 1, 1);
@@ -61,7 +61,7 @@ void Display(){
 			glMatrixMode(GL_MODELVIEW);
 			glRotatef(10, 1, 0, 0);
 			DisplayAxe();
-			DisplayObiect();
+			DisplayObject();
 			break;
 		case 'y':
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -69,7 +69,7 @@ void Display(){
 			glMatrixMode(GL_MODELVIEW);
 			glRotatef(10, 0, 1, 0);
 			DisplayAxe();
-			DisplayObiect();
+			DisplayObject();
 			break;
 		case 'z':
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -77,7 +77,7 @@ void Display(){
 			glMatrixMode(GL_MODELVIEW);
 			glRotatef(10, 0, 0, 1);
 			DisplayAxe();
-			DisplayObiect();
+			DisplayObject();
 			break;
 		case 'q':
 			// orthographic parallel projection: front-elevation projection
@@ -87,7 +87,7 @@ void Display(){
 			glLoadIdentity();
 			DisplayAxe();
 			glTranslated(0, 0, -lat);
-			DisplayObiect();
+			DisplayObject();
 			break;
 		case 'w':
 			// orthographic parallel projection: front-elevation projection
@@ -101,7 +101,7 @@ void Display(){
 			glRotated(180, 0, 1, 0);
 			glTranslated(-lat / 2.0, -lat / 2.0, -lat / 2.0);
 			DisplayAxe();
-			DisplayObiect();
+			DisplayObject();
 			glPopMatrix();
 			break;
 		default:
@@ -253,7 +253,7 @@ void InitObiect(){
 	glEndList();
 }
 
-void DisplayObiect(){
+void DisplayObject(){
 	glCallList(k);
 }
 
