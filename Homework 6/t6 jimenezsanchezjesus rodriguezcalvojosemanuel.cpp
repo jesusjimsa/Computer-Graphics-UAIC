@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
+#include <time.h>       /* time */
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -10,13 +11,16 @@
 #endif
 
 // the size of the window measured in pixels
-#define dim 300
+#define dim 600
 
 using namespace std;
 
 unsigned char prevKey;
 
 enum EObiect{cubw, cubs, sferaw, sferas, triangle, asked_cube} ob = cubw;
+
+int change_cube_axis = 0;
+int vertexA[3], vertexB[3], vertexC[3];
 
 void DisplayAxe(){
 	int X, Y, Z;
@@ -73,44 +77,100 @@ void Display4(){
 	glutSolidSphere(1, 10, 10);
 }
 
-void Display5(){
+void randAxis(int vertex[]){
+	vertex[0] = rand() % 10;
+	vertex[1] = rand() % 10;
+	vertex[2] = rand() % 10;
+}
+
+// Triangle
+void Display5(bool change_vertices){
 	glColor3f(1, 0, 0);
 	
 	glBegin(GL_TRIANGLES);
 	
-	glVertex3f(6.0, 5.0, 3.0);
-	glVertex3f(0.0, 0.0, 1.0);
-	glVertex3f(0.0, 0.0, 5.0);
+	if(change_vertices){
+		randAxis(vertexA);
+	}
+	
+	glVertex3f(vertexA[0], vertexA[1], vertexA[2]);
+	
+	if(change_vertices){
+		randAxis(vertexB);
+	}
+	
+	glVertex3f(vertexB[0], vertexB[1], vertexB[2]);
+	
+	if(change_vertices){
+		randAxis(vertexC);
+	}
+	
+	glVertex3f(0, 0, 0);
 	
 	glEnd();
 }
 
-void Display6(){
+void Display6(bool change){
 	glLineWidth(2);
 	glColor3f(0, 0, 0);
+	///////////// La diagonal, no el lado...
 	
 	// Transformations for placing the cube in the right place
-	glRotatef(45, 0, 0, 1);
-	glRotatef(45, 0, 1, 0);
-	glRotatef(18, 0, 0, 1);
-	glRotatef(10, 0, 1, 0);
-	glRotatef(5, 1, 0, 0);
-	glTranslatef(0.85, 0.85, 0.85);
+	switch (change_cube_axis) {
+		case 1:
+			glRotatef(45, 0, 0, 1);
+			break;
+		case 2:
+			glRotatef(45, 0, 1, 0);
+			break;
+		case 3:
+			glRotatef(45, 1, 0, 0);
+			break;
+		default:
+			break;
+	}
+	
+	glTranslatef(0.5, 0.5, 0.5);
 	
 	// Drawing the cube with the right size
-	glutWireCube(1.7);
+	glutWireCube(1);
 	
 	// Placing everything where it was before
-	glTranslatef(-0.85, -0.85, -0.85);
-	glRotatef(-5, 1, 0, 0);
-	glRotatef(-10, 0, 1, 0);
-	glRotatef(-18, 0, 0, 1);
-	glRotatef(-45, 0, 1, 0);
-	glRotatef(-45, 0, 0, 1);
+	glTranslatef(-0.5, -0.5, -0.5);
 	
+	switch (change_cube_axis) {
+		case 0:
+			if(change){
+				change_cube_axis++;
+			}
+			break;
+		case 1:
+			glRotatef(-45, 0, 0, 1);
+			
+			if(change){
+				change_cube_axis++;
+			}
+			break;
+		case 2:
+			glRotatef(-45, 0, 1, 0);
+			
+			if(change){
+				change_cube_axis++;
+			}
+			break;
+		case 3:
+			glRotatef(-45, 1, 0, 0);
+			
+			if(change){
+				change_cube_axis = 0;
+			}
+			break;
+		default:
+			break;
+	}
 }
 
-void DisplayObiect(){
+void DisplayObject(){
 	switch (ob){
 		case cubw:
 			Display1();
@@ -125,10 +185,10 @@ void DisplayObiect(){
 			Display4();
 			break;
 		case triangle:
-			Display5();
+			Display5(false);
 			break;
 		case asked_cube:
-			Display6();
+			Display6(false);
 			break;
 		default:
 			break;
@@ -214,48 +274,48 @@ void Display(void) {
 			ob = sferas;
 			break;
 		case '5':
-			Display5();
+			Display5(true);
 			ob = triangle;
 			break;
 		case '6':
-			Display6();
+			Display6(true);
 			ob = asked_cube;
 			break;
 		case 'x':
 			glClear(GL_COLOR_BUFFER_BIT);
 			DisplayX();
 			DisplayAxe();
-			DisplayObiect();
+			DisplayObject();
 			break;
 		case 'y':
 			glClear(GL_COLOR_BUFFER_BIT);
 			DisplayY();
 			DisplayAxe();
-			DisplayObiect();
+			DisplayObject();
 			break;
 		case 'z':
 			glClear(GL_COLOR_BUFFER_BIT);
 			DisplayZ();
 			DisplayAxe();
-			DisplayObiect();
+			DisplayObject();
 			break;
 		case 't':
 			glClear(GL_COLOR_BUFFER_BIT);
 			DisplayT();
 			DisplayAxe();
-			DisplayObiect();
+			DisplayObject();
 			break;
 		case 's':
 			glClear(GL_COLOR_BUFFER_BIT);
 			DisplayS();
 			DisplayAxe();
-			DisplayObiect();
+			DisplayObject();
 			break;
 		case 'p':
 			glClear(GL_COLOR_BUFFER_BIT);
 			DisplayP();
 			DisplayAxe();
-			DisplayObiect();
+			DisplayObject();
 			break;
 		default:
 			break;
@@ -282,6 +342,9 @@ void MouseFunc(int button, int state, int x, int y) {
 }
 
 int main(int argc, char** argv) {
+	/* initialize random seed: */
+	srand((unsigned int)time(NULL));
+	
 	glutInit(&argc, argv);
 	
 	glutInitWindowSize(dim, dim);
