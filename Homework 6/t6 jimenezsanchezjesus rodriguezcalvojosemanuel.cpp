@@ -113,7 +113,6 @@ void Display5(bool change_vertices){
 void Display6(bool change){
 	glLineWidth(2);
 	glColor3f(0, 0, 0);
-	///////////// La diagonal, no el lado...
 	
 	// Transformations for placing the cube in the right place
 	switch (change_cube_axis) {
@@ -170,6 +169,15 @@ void Display6(bool change){
 	}
 }
 
+void DisplayM(){
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	
+	glRotatef(-45, 0, 1, 0);
+	
+	Display6(false);
+}
+
 void DisplayObject(){
 	switch (ob){
 		case cubw:
@@ -193,6 +201,36 @@ void DisplayObject(){
 		default:
 			break;
 	}
+}
+
+void DisplayQ(){
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(-20, 20, -20, 20, -20, 100);
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glRotated(20, 1, 0, 0);
+	glRotated(-20, 0, 1, 0);
+	glTranslatef(2.5, 2.5, 2.5);
+//	glRotated(30, 1, 1, 1);
+	glutWireCube(5);
+}
+
+void DisplayW(){
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(-20, 20, -20, 20, -20, 100);
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glRotated(20, 1, 0, 0);
+	glRotated(-20, 0, 1, 0);
+	glTranslatef(2.5, 2.5, 2.5);
+//	glRotated(30, 1, 1, 1);
+	glRotatef(45, 1, 0, 0);
+	glRotatef(45, 0, 1, 0);
+	glutWireCube(5);
 }
 
 // the rotation with 10 degrees about the Ox axis
@@ -316,6 +354,22 @@ void Display(void) {
 			DisplayP();
 			DisplayAxe();
 			DisplayObject();
+			break;
+		case 'q':
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+
+			glClear(GL_COLOR_BUFFER_BIT);
+			DisplayAxe();
+			DisplayQ();
+			break;
+		case 'w':
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+
+			glClear(GL_COLOR_BUFFER_BIT);
+			DisplayAxe();
+			DisplayW();
 			break;
 		default:
 			break;
