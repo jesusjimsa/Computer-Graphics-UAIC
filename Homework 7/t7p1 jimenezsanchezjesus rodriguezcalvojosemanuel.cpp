@@ -9,10 +9,11 @@
 #endif
 
 // the size of the window measured in pixels
-#define dim 300
+#define dim 600
 
 unsigned char prevKey;
 GLint k;
+
 // the size of the cube
 GLdouble lat = 5;
 
@@ -104,6 +105,42 @@ void Display(){
 			DisplayObject();
 			glPopMatrix();
 			break;
+		case 'e':
+			// orthographic parallel projection: front-elevation projection
+			parallelProjection('w');
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+			glPushMatrix();
+			glTranslated(0, 0, -lat);
+			glTranslated(lat / 2.0, lat / 2.0, lat / 2.0);
+			glRotated(90, 1, 0, 0);
+			glTranslated(-lat / 2.0, -lat / 2.0, -lat / 2.0);
+			DisplayAxe();
+			DisplayObject();
+			glPopMatrix();
+			break;
+		case '+':
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			parallelProjection('+');
+			glMatrixMode(GL_MODELVIEW);
+			glTranslatef(-10, -10, -10);
+			DisplayAxe();
+			DisplayObject();
+			glTranslatef(10, 10, 10);
+			glPopMatrix();
+			break;
+		case 'n':
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			parallelProjection('n');
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+			glTranslatef(-15, -10, -40);
+			DisplayObject();
+			DisplayAxe();
+			glTranslatef(15, 10, 40);
+			glPopMatrix();
+			break;
 		default:
 			break;
 	}
@@ -132,6 +169,11 @@ void MouseFunc(int button, int state, int x, int y){
 void parallelProjection(unsigned char c){
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+	double t = 30 * atan(1) * 4 / 180;
+	double cost = cos(t) / 2;
+	double sint = sin(t) / 2;
+	GLdouble m[16] = {1, 0, 0, 0, 0, 1, 0, 0, cost, sint, 0, 0, 0, 0, 0, 1};
+	
 	switch (c){
 		case 'X':
 		case 'Y':
@@ -140,7 +182,15 @@ void parallelProjection(unsigned char c){
 			break;
 		case 'q':
 		case 'w':
+		case 'e':
 			glOrtho(-1, 6, -1, 6, -1, 20);
+			break;
+		case '+':
+			glFrustum(-5, 5, -5, 5, 2, 200);
+			break;
+		case 'n':glMultMatrixd(m);
+			glOrtho(-10, 10, -10, 10, 2, 20);
+			
 			break;
 		default:
 			break;
